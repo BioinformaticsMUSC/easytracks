@@ -284,7 +284,7 @@ class EasyTracks:
                        bigwig_files: List[str], colors: List[str] = None,
                        bed_files: List[str] = None, bed_colors: List[str] = None,
                        gtf_files: List[str] = None, auto_scale: bool = True, 
-                       output: str = None) -> List[str]:
+                       output: str = None, keep_ini_file: bool = False) -> List[str]:
         """Generate track plots for specified regions
         
         Args:
@@ -298,6 +298,7 @@ class EasyTracks:
             gtf_files: GTF annotation files (optional)
             auto_scale: Auto-scale Y-axis based on data
             output: Output directory or file prefix
+            keep_ini_file: Keep INI configuration files after plotting (default: False)
             
         Returns:
             List of generated file paths
@@ -377,6 +378,14 @@ class EasyTracks:
                 if result.returncode == 0:
                     print(f"  ✅ Created: {output_file}")
                     generated_files.append(output_file)
+                    
+                    # Clean up INI file if requested
+                    if not keep_ini_file:
+                        try:
+                            os.remove(ini_file)
+                            print(f"  🧹 Cleaned up: {os.path.basename(ini_file)}")
+                        except Exception as e:
+                            print(f"  ⚠️ Warning: Could not remove INI file {ini_file}: {e}")
                 else:
                     print(f"  ❌ Error: {result.stderr}")
             except Exception as e:
@@ -386,7 +395,7 @@ class EasyTracks:
     
     def quick_plot(self, regions_input: str, bigwig_dir: str = None, 
                    colors: str = None, bed_dir: str = None, bed_colors: str = None,
-                   gtf_file: str = None, output: str = None) -> List[str]:
+                   gtf_file: str = None, output: str = None, keep_ini_file: bool = False) -> List[str]:
         """Quick plot generation with minimal configuration"""
         
         # Find BigWig files
@@ -419,7 +428,8 @@ class EasyTracks:
             
         # Generate tracks
         return self.generate_tracks(regions, bigwig_files, color_list, 
-                                   bed_files, bed_color_list, gtf_files, output=output)
+                                   bed_files, bed_color_list, gtf_files, 
+                                   output=output, keep_ini_file=keep_ini_file)
     
     def _parse_regions_input(self, regions_input: str) -> List[Union[Tuple[str, int, int], Tuple[str, int, int, str]]]:
         """Parse regions from various input formats"""

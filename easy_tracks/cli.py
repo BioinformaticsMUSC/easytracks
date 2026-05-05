@@ -54,6 +54,8 @@ Examples:
                        help='Output directory or file prefix (default: from config)')
     parser.add_argument('--config', 
                        help='YAML configuration file')
+    parser.add_argument('--keep-ini', action='store_true',
+                       help='Keep INI configuration files after plotting (default: remove them)')
     parser.add_argument('--interactive', '-i', action='store_true',
                        help='Interactive mode with prompts')
     
@@ -101,14 +103,20 @@ Examples:
         output = input(f"\nOutput directory or prefix [optional, default: {easy_tracks.config['output_dir']}]: ").strip()
         if not output:
             output = None
+        
+        # Ask about keeping INI files
+        keep_ini_input = input("\nKeep INI configuration files? [y/N]: ").strip().lower()
+        keep_ini = keep_ini_input.startswith('y')
             
         # Generate tracks
-        files = easy_tracks.quick_plot(region_input, bw_dir, colors, bed_dir, bed_colors, gtf_file, output)
+        files = easy_tracks.quick_plot(region_input, bw_dir, colors, bed_dir, bed_colors, 
+                                      gtf_file, output, keep_ini_file=keep_ini)
         
     else:
         # Command line mode
         files = easy_tracks.quick_plot(args.region, args.bigwig_dir, args.colors, 
-                                      args.bed_dir, args.bed_colors, args.gtf_file, args.output)
+                                      args.bed_dir, args.bed_colors, args.gtf_file, 
+                                      args.output, keep_ini_file=args.keep_ini)
     
     # Summary
     if files:
