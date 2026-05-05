@@ -271,7 +271,7 @@ class EasyTracks:
                     f"height = {self.config['gtf_height']}",
                     "color = #1f77b4",
                     "border_color = black",
-                    "display = collapsed",
+                    "display = stacked",
                     "labels = true",
                     "style = UCSC",
                     "gene_rows = 10",
