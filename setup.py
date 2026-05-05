@@ -14,14 +14,22 @@ readme_file = this_directory / "README.md"
 if readme_file.exists():
     long_description = readme_file.read_text()
 
-# Read version from __init__.py
-version = {}
-with open("easy_tracks/__init__.py") as fp:
-    exec(fp.read(), version)
+# Read version from __init__.py safely
+def get_version():
+    """Extract version from __init__.py without using exec"""
+    version_file = os.path.join("easy_tracks", "__init__.py")
+    with open(version_file) as fp:
+        for line in fp:
+            if line.startswith("__version__"):
+                # Extract version from line like: __version__ = "1.0.0"
+                return line.split("=")[1].strip().strip('"').strip("'")
+    return "1.0.0"
+
+version_string = get_version()
 
 setup(
     name="easy-tracks",
-    version=version.get("__version__", "1.0.0"),
+    version=version_string,
     author="Easy Tracks Development Team",
     author_email="",
     description="User-friendly pyGenomeTracks generator for genomics data visualization",
@@ -63,7 +71,7 @@ setup(
     entry_points={
         "console_scripts": [
             "easy-tracks=easy_tracks.cli:main",
-            "narrowpeak-to-bed=easy_tracks.utils:convert_narrowpeak_to_bed",
+            "narrowpeak-to-bed=easy_tracks.utils:narrowpeak_to_bed_cli",
         ],
     },
     include_package_data=True,

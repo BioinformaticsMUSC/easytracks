@@ -4,6 +4,7 @@ Contains helper functions for file conversion and processing
 """
 
 import os
+import argparse
 from pathlib import Path
 from typing import List, Optional
 
@@ -215,3 +216,67 @@ def get_package_config_path(config_name: str = "easy_tracks_config.yaml") -> Opt
         return str(config_path)
     
     return None
+
+
+def narrowpeak_to_bed_cli():
+    """
+    Command line interface for narrowPeak to BED conversion
+    """
+    parser = argparse.ArgumentParser(
+        description='Convert narrowPeak files to BED format',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Convert single file
+  narrowpeak-to-bed peaks.narrowPeak
+
+  # Convert single file with custom output
+  narrowpeak-to-bed peaks.narrowPeak -o peaks.bed
+
+  # Convert all narrowPeak files in directory
+  narrowpeak-to-bed -d bed_directory/
+
+  # Convert directory with custom output directory
+  narrowpeak-to-bed -d input_dir/ -o output_dir/
+        """
+    )
+    
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('input_file', nargs='?', help='Input narrowPeak file')
+    group.add_argument('-d', '--directory', help='Directory containing narrowPeak files')
+    
+    parser.add_argument('-o', '--output', help='Output file or directory')
+    parser.add_argument('--no-score', action='store_true', help='Exclude score column')
+    parser.add_argument('--no-strand', action='store_true', help='Exclude strand column')
+    
+    args = parser.parse_args()
+    
+    if args.directory:
+        # Directory conversion
+        success = convert_narrowpeak_directory(
+            args.directory, 
+            args.output,
+            "*.narrowPeak"
+        )
+        if not success:
+            exit(1)
+    else:
+        # Single file conversion
+        if not os.path.exists(args.input_file):
+            print(f"❌ Error: File {args.input_file} not found!")
+            exit(1)
+        
+        success = convert_narrowpeak_to_bed(
+            args.input_file,
+            args.output,
+            keep_score=not args.no_score,
+            keep_strand=not args.no_strand
+        )
+        if not success:
+            exit(1)
+    
+    print("🎉 Conversion completed successfully!")
+
+
+if __name__ == "__main__":
+    narrowpeak_to_bed_cli()
