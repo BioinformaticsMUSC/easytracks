@@ -8,7 +8,7 @@ import pandas as pd
 import pyBigWig
 import yaml
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Union
 import subprocess
 
 
@@ -280,12 +280,28 @@ class EasyTracks:
         
         return "\n".join(ini_content)
     
-    def generate_tracks(self, regions: List[Tuple[str, int, int, str]], 
+    def generate_tracks(self, regions: List[Union[Tuple[str, int, int], Tuple[str, int, int, str]]], 
                        bigwig_files: List[str], colors: List[str] = None,
                        bed_files: List[str] = None, bed_colors: List[str] = None,
                        gtf_files: List[str] = None, auto_scale: bool = True, 
                        output: str = None) -> List[str]:
-        """Generate track plots for specified regions"""
+        """Generate track plots for specified regions
+        
+        Args:
+            regions: List of region tuples. Each tuple can be:
+                    - (chr_name, start, end) - gene_name will be auto-generated
+                    - (chr_name, start, end, gene_name) - explicit gene name
+            bigwig_files: List of BigWig file paths
+            colors: Colors for BigWig tracks (optional)
+            bed_files: BED/peak files to overlay (optional)
+            bed_colors: Colors for BED tracks (optional)
+            gtf_files: GTF annotation files (optional)
+            auto_scale: Auto-scale Y-axis based on data
+            output: Output directory or file prefix
+            
+        Returns:
+            List of generated file paths
+        """
         
         # Determine output directory and file prefix
         if output is None:
@@ -303,7 +319,17 @@ class EasyTracks:
         os.makedirs(output_dir, exist_ok=True)
         generated_files = []
         
-        for chr_name, start, end, gene_name in regions:
+        for i, region in enumerate(regions):
+            # Handle both 3-element and 4-element tuples
+            if len(region) == 3:
+                chr_name, start, end = region
+                gene_name = f"{chr_name}_{start}_{end}"
+            elif len(region) == 4:
+                chr_name, start, end, gene_name = region
+            else:
+                print(f"⚠️ Warning: Skipping invalid region format: {region}")
+                continue
+                
             print(f"\n🎯 Processing {gene_name}: {chr_name}:{start}-{end}")
             
             # Calculate plot window with padding
@@ -391,7 +417,7 @@ class EasyTracks:
         return self.generate_tracks(regions, bigwig_files, color_list, 
                                    bed_files, bed_color_list, gtf_files, output=output)
     
-    def _parse_regions_input(self, regions_input: str) -> List[Tuple[str, int, int, str]]:
+    def _parse_regions_input(self, regions_input: str) -> List[Union[Tuple[str, int, int], Tuple[str, int, int, str]]]:
         """Parse regions from various input formats"""
         regions = []
         
