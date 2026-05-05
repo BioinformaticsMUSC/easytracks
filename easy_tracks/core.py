@@ -250,6 +250,7 @@ class EasyTracks:
                     "border_color = black",
                     "interval_height = 100",
                     "display = collapsed",
+                    "labels = false",
                     ""
                 ])
         
