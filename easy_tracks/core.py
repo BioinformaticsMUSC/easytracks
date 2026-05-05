@@ -324,8 +324,12 @@ class EasyTracks:
             if len(region) == 3:
                 chr_name, start, end = region
                 gene_name = f"{chr_name}_{start}_{end}"
+                start = int(start)
+                end = int(end)
             elif len(region) == 4:
                 chr_name, start, end, gene_name = region
+                start = int(start)
+                end = int(end)
             else:
                 print(f"⚠️ Warning: Skipping invalid region format: {region}")
                 continue
