@@ -1,0 +1,72 @@
+# Easy Tracks Configuration File
+# Customize these settings for your project
+
+# Directories
+bigwig_dir: "/data/kozo/bigwig_files"          # Directory containing BigWig files  
+bed_dir: "/data/kozo/bed_converted"                      # Directory containing BED/peak files
+gtf_dir: "/data/reference/mm39"             # Directory containing GTF/GFF annotation files
+gtf_file: "/data/reference/mm39/gencode.vM38.annotation.gtf"                      # Specific GTF file path (overrides gtf_dir if set)
+                                    # Example: "/path/to/gencode.v43.annotation.gtf"
+                                    # or: "/data/kozo/annotations/genes.gtf"
+output_dir: "track_plots"           # Where to save generated plots
+
+# Plot settings
+bp_shift: 10000                     # Base pairs to extend around regions
+track_height: 2.5                   # Height of each BigWig track in cm
+bed_height: 1.5                     # Height of BED/peak tracks in cm  
+gtf_height: 2                       # Height of GTF/annotation tracks in cm
+number_of_bins: 700                 # Resolution (more bins = smoother plots)
+summary_method: "mean"              # How to summarize data: mean, max, min, sum
+
+# Visual settings
+default_colors:                     # Colors to cycle through for BigWig tracks
+  - "#3498DB"   # Blue
+  - "#E74C3C"   # Red  
+  - "#2ECC71"   # Green
+  - "#F39C12"   # Orange
+  - "#9B59B6"   # Purple
+  - "#1ABC9C"   # Teal
+  - "#34495E"   # Dark gray
+
+bed_colors:                         # Colors for BED/peak tracks
+  - "#FF6B6B"   # Light red
+  - "#4ECDC4"   # Light teal
+  - "#45B7D1"   # Light blue
+  - "#96CEB4"   # Light green
+  - "#FFEAA7"   # Light yellow
+  - "#DDA0DD"   # Light purple
+
+# File settings
+file_extensions:                    # BigWig file extensions to search for
+  - ".bw" 
+  - ".bigwig"
+
+bed_extensions:                     # BED file extensions to search for
+  - ".bed"
+  - ".narrowPeak" 
+  - ".broadPeak"
+  
+gtf_extensions:                     # GTF file extensions to search for
+  - ".gtf"
+  - ".gff"
+  - ".gff3"
+
+# Optional: Pre-defined sample groups with colors
+sample_groups:
+  CHAMP1:
+    files: ["C_W1.filtered.bw", "C_W2.filtered.bw", "C_K1.filtered.bw", "C_K2.filtered.bw"]
+    colors: ["#3498DB", "#2980B9", "#E74C3C", "#C0392B"]
+    labels: ["WT_rep1", "WT_rep2", "KO_rep1", "KO_rep2"]
+    bed_files: ["C_W1_peaks.bed", "C_W2_peaks.bed", "C_K1_peaks.bed", "C_K2_peaks.bed"]
+    
+  H3K27Ac:
+    files: ["H3K27_W1.filtered.bw", "H3K27_W2.filtered.bw", "H3K27_K1.filtered.bw", "H3K27_K2.filtered.bw"]  
+    colors: ["#2ECC71", "#27AE60", "#E67E22", "#D35400"]
+    labels: ["WT_rep1", "WT_rep2", "KO_rep1", "KO_rep2"]
+    bed_files: ["H3K27_W1_peaks.bed", "H3K27_W2_peaks.bed", "H3K27_K1_peaks.bed", "H3K27_K2_peaks.bed"]
+    
+  POGZ:
+    files: ["P_W1.filtered.bw", "P_W2.filtered.bw", "P_K1.filtered.bw", "P_K2.filtered.bw"]
+    colors: ["#9B59B6", "#8E44AD", "#F39C12", "#E67E22"]  
+    labels: ["WT_rep1", "WT_rep2", "KO_rep1", "KO_rep2"]
+    bed_files: ["P_W1_peaks.bed", "P_W2_peaks.bed", "P_K1_peaks.bed", "P_K2_peaks.bed"]

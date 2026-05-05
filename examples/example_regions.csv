@@ -1,0 +1,6 @@
+chr,start,end,gene
+chr1,1000000,1100000,Example_Region_1
+chr2,5000000,5100000,Example_Region_2
+chr7,140000000,141000000,BRAF_Region
+chr8,128000000,129000000,MYC_Region
+chr17,7500000,7600000,TP53_Region

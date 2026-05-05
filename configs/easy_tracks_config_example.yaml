@@ -1,0 +1,51 @@
+# Easy Tracks Configuration - Example with GTF setup
+# Copy this file and modify for your specific project
+
+# Directories
+bigwig_dir: "../bigwig_files"       # Directory containing BigWig files  
+bed_dir: "../bed_converted"         # Directory containing BED/peak files
+gtf_dir: "../annotations"          # Directory containing GTF/GFF annotation files
+gtf_file: "../annotations/gencode.v43.annotation.gtf"  # Specific GTF file (uncomment to use)
+output_dir: "track_plots"           # Where to save generated plots
+
+# Plot settings
+bp_shift: 10000                     # Base pairs to extend around regions
+track_height: 2.5                   # Height of each BigWig track in cm
+bed_height: 1.5                     # Height of BED/peak tracks in cm  
+gtf_height: 3                       # Height of GTF/annotation tracks in cm
+number_of_bins: 700                 # Resolution (more bins = smoother plots)
+summary_method: "mean"              # How to summarize data: mean, max, min, sum
+
+# Visual settings
+default_colors:                     # Colors to cycle through for BigWig tracks
+  - "#3498DB"   # Blue
+  - "#E74C3C"   # Red  
+  - "#2ECC71"   # Green
+  - "#F39C12"   # Orange
+  - "#9B59B6"   # Purple
+  - "#1ABC9C"   # Teal
+  - "#34495E"   # Dark gray
+
+bed_colors:                         # Colors for BED/peak tracks
+  - "#FF6B6B"   # Light red
+  - "#4ECDC4"   # Light teal
+  - "#45B7D1"   # Light blue
+  - "#96CEB4"   # Light green
+  - "#FFEAA7"   # Light yellow
+  - "#DDA0DD"   # Plum
+  - "#98D8C8"   # Mint
+
+# File extensions (usually don't need to change)
+file_extensions:                    # BigWig file extensions to search for
+  - ".bw" 
+  - ".bigwig"
+  
+bed_extensions:                     # BED/peak file extensions
+  - ".bed"
+  - ".narrowPeak" 
+  - ".broadPeak"
+  
+gtf_extensions:                     # Annotation file extensions
+  - ".gtf"
+  - ".gff"
+  - ".gff3"
